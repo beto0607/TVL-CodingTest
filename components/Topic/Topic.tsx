@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { Topic } from '../../types/types';
 /**
  * COMPONENT PROPS
@@ -11,8 +11,7 @@ export type Props = StateProps & DispatchProps & OwnProps
 /**
  * REACT COMPONENT
  */
-export const CategoryContainer: React.FC<Props> = ({ text, selected, id }: Props) => {
-    const [collapsed, setCollapsed] = useState(true);
+export const TopicComponent: React.FC<Props> = ({ text, selected, id }: Props) => {
     return (
         <View style={styles.container}>
             <Text style={selected ? styles.selected : styles.text}>{text}</Text>

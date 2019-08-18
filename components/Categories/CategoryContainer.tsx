@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import { BoxTopicContainer } from './BoxTopicContainer';
+import { TopicComponent } from '../Topic/Topic';
 import { Category } from '../../types/types';
 
 /**
@@ -22,7 +22,7 @@ export const CategoryContainer: React.FC<Props> = ({ title, topics }: Props) => 
                 <Text style={styles.quantity}>0</Text>
             </View>
             {
-                collapsed ? null : (<BoxTopicContainer topics={topics || []} />)
+                collapsed ? null : topics.map(topic => <TopicComponent {...topic} key={topic.id} />)
             }
             <Button
                 title={collapsed ? "More" : 'Less'}
