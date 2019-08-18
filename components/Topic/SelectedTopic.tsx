@@ -31,10 +31,10 @@ export const SelectedTopicConnected: React.FC<Props> = ({ selectedTopic }: Props
  */
 const styles = StyleSheet.create({
     container: {
-        padding: 5,
+        paddingVertical: 10,
         backgroundColor: '#056f00',
         width: '100%',
-        height: 60
+        alignItems: 'center'
     },
     button: {
         color: '#fff'

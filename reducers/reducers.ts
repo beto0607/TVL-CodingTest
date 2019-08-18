@@ -55,9 +55,13 @@ export const topicReducer = (state: TopicState = initialTopicsState, action: Top
     const { topics, selectedTopic } = state;
     switch (type) {
         case TOPIC_SELECTED:
+            if (!selectedTopic || selectedTopic.id !== action.topic.id) {
+                return { ...state, selectedTopic: action.topic }
+            }
+            selectedTopic.selected = false;
+            return { ...state, selectedTopic: null }
         case TOPIC_DRAGGED:
             if (selectedTopic) { selectedTopic.selected = false }
-            action.topic.selected = true;
             return { ...state, selectedTopic: action.topic };
         case TOPIC_DROPPED:
             selectedTopic.selected = false;

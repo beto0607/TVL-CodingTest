@@ -26,8 +26,8 @@ export class TopicContainerConnected extends React.Component<Props, State>{
     render() {
         const { topics } = this.props;
         return (
-            <View>
-                {topics.map(topic => <TopicComponent {...topic} key={topic.id} />)}
+            <View style={styles.container}>
+                {topics.reverse().map(topic => <TopicComponent {...topic} key={topic.id} />)}
             </View>
         );
     }
@@ -35,7 +35,14 @@ export class TopicContainerConnected extends React.Component<Props, State>{
 /**
  *  STYLES
  */
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
+        flexWrap: 'wrap'
+    }
+});
 /**
  * REDUX 
  */
