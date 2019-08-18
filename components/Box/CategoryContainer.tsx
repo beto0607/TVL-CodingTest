@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { BoxTopicContainer } from './BoxTopicContainer';
+import { Category } from '../../types/types';
 
-export interface BoxContainerProps {
-    title: string;
-    topics: Array<string>;
-};
-
-export const BoxContainer: React.FC<BoxContainerProps> = ({ title, topics }: BoxContainerProps) => {
+/**
+ * COMPONENT PROPS
+ */
+interface OwnProps extends Category { }
+interface StateProps { }
+interface DispatchProps { }
+export type Props = StateProps & DispatchProps & OwnProps
+/**
+ * REACT COMPONENT
+ */
+export const CategoryContainer: React.FC<Props> = ({ title, topics }: Props) => {
     const [collapsed, setCollapsed] = useState(true);
     return (
         <View style={styles.container}>
@@ -16,17 +21,20 @@ export const BoxContainer: React.FC<BoxContainerProps> = ({ title, topics }: Box
                 <Text style={styles.title}>{title}</Text>
                 <Text style={styles.quantity}>0</Text>
             </View>
+            {
+                collapsed ? null : (<BoxTopicContainer topics={topics || []} />)
+            }
             <Button
                 title={collapsed ? "More" : 'Less'}
                 onPress={() => setCollapsed(!collapsed)}
                 color="#841584"
             />
-            {
-                collapsed ? null : (<BoxTopicContainer topics={topics || []} />)
-            }
         </View>
     )
 }
+/**
+ *  STYLES
+ */
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#e0f7fa',
@@ -50,3 +58,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
 });
+/**
+ * REDUX
+ */

@@ -1,17 +1,23 @@
 import React from 'react';
-
 import { StyleSheet, Text, View } from 'react-native';
 
-
-export interface HeaderProps {
+/**
+ * COMPONENT PROPS
+ */
+export interface Props {
     title?: string;
 };
-
-export const Header: React.FC<HeaderProps> = ({ title }: HeaderProps) => (
+/**
+ * REACT COMPONENT
+ */
+export const Header: React.FC<Props> = ({ title }: Props) => (
     <View style={styles.container}>
         <Text style={styles.text}>{title || 'Header'}</Text>
     </View>
 )
+/**
+ *  STYLES
+ */
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#056f00',

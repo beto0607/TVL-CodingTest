@@ -1,19 +1,23 @@
 import React from 'react';
 
 import { StyleSheet, Text, View } from 'react-native';
+import { Topic } from '../../types/types';
 // import uuid from 'uuid';
 
-export interface BoxTopicContainerProps {
-    topics: Array<string>;
-};
+interface OwnProps { }
+interface DispatchProps { }
+interface StateProps {
+    topics: Array<Topic>;
+}
+export type BoxTopicContainerProps = StateProps & DispatchProps & OwnProps
 
 export const BoxTopicContainer: React.FC<BoxTopicContainerProps> = ({ topics }: BoxTopicContainerProps) => {
     return (
         <View style={styles.container}>
+            {topics.map(({ id, text }) => (<Text key={id}>{text}</Text>))}
         </View>
     )
 }
-// {topics.map(topic => (<Text key={uuid.v1()}>{topic}</Text>))}
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#e0f7fa',

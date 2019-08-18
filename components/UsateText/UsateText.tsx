@@ -1,17 +1,23 @@
 import React from 'react';
-
 import { StyleSheet, Text, View } from 'react-native';
 
-
-export interface UsateTextProps {
+/**
+ * COMPONENT PROPS
+ */
+export interface Props {
     text?: string;
 };
-
-export const UsateText: React.FC<UsateTextProps> = ({ text }: UsateTextProps) => (
+/**
+ * REACT COMPONENT
+ */
+export const UsateText: React.FC<Props> = ({ text }: Props) => (
     <View style={styles.container}>
         <Text style={styles.text}>{text || 'Drag a topic into a box to populate the field...'}</Text>
     </View>
 )
+/**
+ *  STYLES
+ */
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#f1f8e9',

@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
 
 import { StyleSheet, Text, View, Button } from 'react-native';
+import { TopicState, ApplicationState } from '../../types/types';
+import { connect } from 'react-redux';
 
-export interface Props {
-    topics: Array<string>;
-}
-export interface State {
-}
-export class TopicContainer extends React.Component<Props, State>{
+/**
+ * COMPONENT PROPS
+ */
+interface OwnProps { }
+interface StateProps extends TopicState { }
+interface DispatchProps { }
+export type Props = StateProps & DispatchProps & OwnProps;
+/**
+ * COMPONENT STATE
+ */
+export interface State { }
+/**
+ * REACT COMPONENT
+ */
+export class TopicContainerConnected extends React.Component<Props, State>{
     constructor(props: Props) {
         super(props);
-
     }
     render() {
         return (
@@ -20,3 +30,14 @@ export class TopicContainer extends React.Component<Props, State>{
         );
     }
 }
+/**
+ *  STYLES
+ */
+const styles = StyleSheet.create({});
+/**
+ * REDUX 
+ */
+const mapStateToProps = ({ topicReducer: { topics } }: ApplicationState): StateProps => ({
+    topics
+});
+export const TopicContainer = connect(mapStateToProps)(TopicContainerConnected);
