@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { Header } from './components/Header/Header';
 import { UsateText } from './components/UsateText/UsateText';
 import { TopicContainer } from './components/Topic/TopicContainer';
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import { store } from './store';
-import { ApplicationState } from './types/types';
 import { CategoriesWrapper } from './components/Categories/CategoriesWrapper';
 import { AddTopicComponent } from './components/Topic/AddTopicComponent';
+import { SelectedTopicComponent } from './components/Topic/SelectedTopic';
 
 /**
  * COMPONENT PROPS
@@ -21,13 +21,14 @@ export type Props = StateProps & DispatchProps & OwnProps
  */
 export const App: React.FC<Props> = (props: Props) => (
   <Provider store={store}>
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Header title="What do you think we..." />
       <UsateText />
       <CategoriesWrapper />
       <TopicContainer />
-      <AddTopicComponent />
-    </View>
+    </ScrollView>
+    <SelectedTopicComponent />
+    <AddTopicComponent />
   </Provider>
 );
 /**

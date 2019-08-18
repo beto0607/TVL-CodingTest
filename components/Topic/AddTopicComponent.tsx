@@ -35,6 +35,7 @@ export const AddTopicComponentConnected: React.FC<Props> = ({ topicAdded }: Prop
     return (
         <View style={styles.container}>
             <Button
+                color={styles.button.color}
                 title="Add topic"
                 onPress={() => togglePromt(true)}
             />
@@ -53,12 +54,13 @@ export const AddTopicComponentConnected: React.FC<Props> = ({ topicAdded }: Prop
 const styles = StyleSheet.create({
     container: {
         padding: 5,
-        margin: 5
+        backgroundColor: '#056f00',
+        width: '100%',
+        height: 60
     },
-    text: {
-    },
-    selected: {
-    },
+    button: {
+        color: '#fff'
+    }
 });
 /**
  * REDUX

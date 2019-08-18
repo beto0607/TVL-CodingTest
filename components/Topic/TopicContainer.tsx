@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { StyleSheet, Text, View } from 'react-native';
-import { TopicState, ApplicationState } from '../../types/types';
+import { TopicState, ApplicationState, TOPIC_SELECTED } from '../../types/types';
 import { connect } from 'react-redux';
+import { TopicComponent } from './Topic';
 
 /**
  * COMPONENT PROPS
@@ -23,9 +24,10 @@ export class TopicContainerConnected extends React.Component<Props, State>{
         super(props);
     }
     render() {
+        const { topics } = this.props;
         return (
             <View>
-                <Text>TopicContainer</Text>
+                {topics.map(topic => <TopicComponent {...topic} key={topic.id} />)}
             </View>
         );
     }
