@@ -1,4 +1,4 @@
-import { TopicState, TOPIC_SELECTED, CategoriesState, TopicActions, CategoryActions, CATEGORY_ADDED, TOPIC_DRAGGED, TOPIC_DROPPED, TOPIC_ADDED, TOPIC_TO_CATEGORY, TopicToCategoryAction } from '../types/types';
+import { TopicState, TOPIC_SELECTED, CategoriesState, TopicActions, CategoryActions, CATEGORY_ADDED, TOPIC_DRAGGED, TOPIC_DROPPED, TOPIC_ADDED, TOPIC_TO_CATEGORY, TopicToCategoryAction, DragAndDropState, DragAndDropActions, DRAG, DROP } from '../types/types';
 import { combineReducers } from 'redux';
 import uuid from 'uuid';
 // Compares 2 topics ids
@@ -138,8 +138,30 @@ export const categoryReducer = (state: CategoriesState = initialCategoriesState,
             return state;
     }
 }
+const initialDragAndDropState: DragAndDropState = {
+    y: 0,
+    topic: null,
+    dragging: false
+}
+export const dragAndDropReducer = (state: DragAndDropState = initialDragAndDropState, action: DragAndDropActions) => {
+    const { type } = action;
+    switch (type) {
+        case DROP:
+        case DRAG:
+            const { y, topic } = action;
+            return {
+                ...state,
+                dragging: type === DRAG,
+                y,
+                topic
+            };
+        default:
+            return state;
+    }
+};
 export const rootReducer = combineReducers({
     topicReducer,
-    categoryReducer
+    categoryReducer,
+    dragAndDropReducer
 })
 
