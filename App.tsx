@@ -22,11 +22,9 @@ export type Props = StateProps & DispatchProps & OwnProps
 export const App: React.FC<Props> = (props: Props) => (
   <Provider store={store}>
     <Header title="What do you think we..." />
-    <ScrollView style={styles.container}>
       <UsateText />
-      <CategoriesWrapper />
-      <TopicContainer />
-    </ScrollView>
+      <CategoriesWrapper />    
+    <TopicContainer />
     <SelectedTopicComponent />
     <AddTopicComponent />
   </Provider>
