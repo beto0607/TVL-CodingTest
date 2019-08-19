@@ -42,6 +42,17 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
     toggleCollapsed = () => {
         this.setState({ collapsed: !this.state.collapsed });
     }
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        const { layoutPosition } = this.state;
+        const { y, topicDropped, topicToCategory, topic, title, topics, id, length } = this.props;
+        // If was dragging, now it isn't and it ocurred above this category
+        if (prevProps.dragging && !this.props.dragging && checkIfYInBox(y, layoutPosition)) {
+            console.log("dropped");
+            console.log({ title, topics, id, length }, topic)
+            topicToCategory({ title, topics, id, length }, topic);
+            topicDropped(topic);
+        }
+    }
     updateLayoutPosition = (e: LayoutChangeEvent) => {
         if (this.boxRef) {
             this.boxRef.measure((...rest) => {
@@ -109,7 +120,6 @@ export const CategoryContainerConnected2: React.FC<Props> = ({ title, id, topics
                 onPress={() => {
                     if (selectedTopic) {
                         topicToCategory({ title, topics, id, length }, selectedTopic);
-                        // removeTopicSelected(selectedTopic);
                         topicDropped(selectedTopic);
                     } else {
                         setCollapsed(!collapsed);
