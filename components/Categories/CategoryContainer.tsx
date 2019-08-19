@@ -1,30 +1,109 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, LayoutChangeEvent } from 'react-native';
 import { TopicComponent } from '../Topic/Topic';
-import { Category, ApplicationState, Topic } from '../../types/types';
+import { Category, ApplicationState, Topic, DragAndDropState } from '../../types/types';
 import { connect } from 'react-redux';
-import { createTopicToCategoryAction, createTopicSelectedAction, createTopicDroppedAction } from '../../actions/actions';
-
+import { createTopicToCategoryAction, createTopicDroppedAction } from '../../actions/actions';
+import { checkIfYInBox } from '../../utils/functions';
 /**
  * COMPONENT PROPS
  */
 interface OwnProps extends Category { }
-interface StateProps {
+interface StateProps extends DragAndDropState {
     selectedTopic?: Topic;
 }
 interface DispatchProps {
     topicToCategory: (category: Category, topic: Topic) => void;
-    removeTopicSelected: (topic: Topic) => void;
     topicDropped: (topic: Topic) => void;
 }
-export type Props = StateProps & DispatchProps & OwnProps
+export type Props = StateProps & DispatchProps & OwnProps;
+
+/**
+ * COMPONENT STATE
+ */
+interface State {
+    collapsed: boolean;
+    layoutPosition: any;
+    hovered: boolean;
+}
 /**
  * REACT COMPONENT
  */
-export const CategoryContainerConnected: React.FC<Props> = ({ title, id, topics, length, topicToCategory, selectedTopic, removeTopicSelected, topicDropped }: Props) => {
+export class CategoryContainerConnected extends React.Component<Props, State>{
+    boxRef: View;
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            collapsed: true,
+            layoutPosition: {},
+            hovered: false
+        };
+    }
+    toggleCollapsed = () => {
+        this.setState({ collapsed: !this.state.collapsed });
+    }
+    updateLayoutPosition = (e: LayoutChangeEvent) => {
+        if (this.boxRef) {
+            this.boxRef.measure((...rest) => {
+                this.setState({ layoutPosition: { y: rest[5], heigth: rest[3] } })
+            })
+        }
+    }
+    render() {
+        const { collapsed, layoutPosition } = this.state;
+        const { dragging, title, topics, id, length, selectedTopic, topicToCategory, topicDropped, y } = this.props;
+        const hovered = dragging && checkIfYInBox(y, layoutPosition) || false;
+        return (
+            <View
+                style={{ ...styles.container, ...(hovered ? styles.containerHovered : {}) }}
+                onLayout={this.updateLayoutPosition}
+                ref={ref => (this.boxRef = ref)}
+            >
+                <TouchableOpacity
+                    style={styles.touchableContainer}
+                    onPress={() => {
+                        if (selectedTopic) {
+                            topicToCategory({ title, topics, id, length }, selectedTopic);
+                            // removeTopicSelected(selectedTopic);
+                            topicDropped(selectedTopic);
+                        } else {
+                            this.toggleCollapsed();
+                        }
+                    }}
+                >
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.quantity}>{length}</Text>
+                    </View>
+                    {
+                        !collapsed && topics.map(topic => <TopicComponent {...topic} key={topic.id} />)
+                    }
+                </TouchableOpacity>
+                {
+                    !collapsed &&
+                    <Button
+                        title={collapsed ? "More" : 'Less'}
+                        onPress={this.toggleCollapsed}
+                        color="#841584"
+                    />
+                }
+            </View>
+        )
+    }
+}
+export const CategoryContainerConnected2: React.FC<Props> = ({ title, id, topics, length, topicToCategory, selectedTopic, topicDropped, topic, y, dragging }: Props) => {
     const [collapsed, setCollapsed] = useState(true);
+    const [layoutPosition, setLayout] = useState({});
+    if (dragging) {
+        console.log(layoutPosition);
+    }
     return (
-        <View style={styles.container}>
+        <View
+            style={{ ...styles.container, ...(dragging ? styles.containerHovered : {}) }}
+            onLayout={e => {
+                setLayout(e.nativeEvent.layout)
+            }}
+        >
             <TouchableOpacity
                 style={styles.touchableContainer}
                 onPress={() => {
@@ -32,7 +111,7 @@ export const CategoryContainerConnected: React.FC<Props> = ({ title, id, topics,
                         topicToCategory({ title, topics, id, length }, selectedTopic);
                         // removeTopicSelected(selectedTopic);
                         topicDropped(selectedTopic);
-                    }else{
+                    } else {
                         setCollapsed(!collapsed);
                     }
                 }}
@@ -64,13 +143,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#e0f7fa',
         width: '100%',
         padding: 7,
-        marginVertical:5,
+        marginVertical: 5,
         borderColor: '#999',
         borderTopWidth: 1,
         borderBottomWidth: 1,
         paddingVertical: 10
     },
-    touchableContainer:{},
+    containerHovered: {
+        backgroundColor: '#8bebf7'
+    },
+    touchableContainer: {},
     titleContainer: {
         flexDirection: 'row',
         width: '100%',
@@ -89,13 +171,13 @@ const styles = StyleSheet.create({
 /**
  * REDUX
  */
-const mapStateToProps = ({ topicReducer: { selectedTopic } }: ApplicationState, ownProps: OwnProps): StateProps => ({
+const mapStateToProps = ({ topicReducer: { selectedTopic }, dragAndDropReducer }: ApplicationState, ownProps: OwnProps): StateProps => ({
     ...ownProps,
-    selectedTopic
+    selectedTopic,
+    ...dragAndDropReducer
 });
 const mapDispatchToProps = (dispatch: any): DispatchProps => ({
     topicToCategory: (category: Category, topic: Topic) => { dispatch(createTopicToCategoryAction(category, topic)) },
-    removeTopicSelected: (topic: Topic) => { dispatch(createTopicSelectedAction(topic)) },
     topicDropped: (topic: Topic) => { dispatch(createTopicDroppedAction(topic)) }
 });
 export const CategoryContainer = connect(mapStateToProps, mapDispatchToProps)(CategoryContainerConnected);

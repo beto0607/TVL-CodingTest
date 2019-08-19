@@ -21,7 +21,6 @@ export type Props = StateProps & DispatchProps & OwnProps;
 export interface State {
     dragging: boolean;
     draggingIndex: number;
-    point: Animated.ValueXY;
     draggingTopic: Topic;
 }
 /**
@@ -33,9 +32,11 @@ export class TopicContainerConnected extends React.Component<Props, State>{
     flatListTopOffset = 0;
     elementHeigth = 0;
     currentIdx = -1;
+    boxRef: View;
+    point = new Animated.ValueXY();
 
     yToIndex = (y: number) => {
-        const value = Math.floor((this.scrollOffset + y - this.flatListTopOffset) / this.elementHeigth)
+        const value = Math.floor((this.scrollOffset + y - this.flatListTopOffset) / this.elementHeigth) - 1
         return value < 0 ? 0 : (value >= this.props.topics.length ? this.props.topics.length - 1 : value)
     }
     constructor(props: Props) {
@@ -43,7 +44,6 @@ export class TopicContainerConnected extends React.Component<Props, State>{
         this.state = {
             dragging: false,
             draggingIndex: -1,
-            point: new Animated.ValueXY(),
             draggingTopic: null
         }
         // This code if from React Native Documentation
@@ -57,12 +57,19 @@ export class TopicContainerConnected extends React.Component<Props, State>{
             onPanResponderTerminationRequest: (evt, gestureState) => false,
             // Drag start
             onPanResponderGrant: (evt, gestureState) => {
-                Animated.event([null, { dx: this.state.point.x, dy: this.state.point.y }])(evt, gestureState)
+                // Animated.event([null, { dx: this.point.x, dy: this.point.y }])(evt, gestureState);
+                Animated.event([{ y: this.point.y }])({
+                    y: gestureState.y0 - this.elementHeigth / 2
+                });
+
                 this.dragStarted(gestureState.y0)
             },
             // Drag update
             onPanResponderMove: (evt, gestureState) => {
-                Animated.event([null, { dx: this.state.point.x, dy: this.state.point.y }])(evt, gestureState);
+                // Animated.event([null, { dx: this.point.x, dy: this.point.y }])(evt, gestureState);
+                Animated.event([{ y: this.point.y }])({ y: gestureState.moveY - this.elementHeigth / 2 });
+
+                this.dragUpdate(gestureState.moveY);
             },
             // Drop
             onPanResponderRelease: (evt, gestureState) => {
@@ -96,30 +103,47 @@ export class TopicContainerConnected extends React.Component<Props, State>{
         this.setState({ dragging: false, draggingIndex: -1, draggingTopic: null });
     }
     render() {
-        const { dragging, draggingIndex, point, draggingTopic } = this.state;
+        const { dragging, draggingIndex, draggingTopic } = this.state;
         const { topics } = this.props;
+
         const renderItem = ({ item, index }, panResponder = true) => (
             <View
                 onLayout={e => {
                     this.elementHeigth = e.nativeEvent.layout.height;
                 }}
                 style={{
-                    opacity: draggingIndex === index ? 0 : 1
+                    opacity: (draggingIndex === index ? 0 : 1)
                 }}>
-                <View {...(panResponder ? this._panResponder.panHandlers : {})}>
+                <TopicComponent {...item} />
+                <View {...(panResponder ? this._panResponder.panHandlers : {})} style={{
+                    width: '100%',
+                    alignItems: 'center',
+                    marginBottom: 10
+                }}>
                     <Text>@</Text>
                 </View>
-                <TopicComponent {...item} />
             </View>
         )
         return (
             <View style={styles.container}
-                onLayout={e => { this.flatListTopOffset = e.nativeEvent.layout.y; }}
+                onLayout={e => {
+                    this.flatListTopOffset = e.nativeEvent.layout.y;
+                    if (this.boxRef) {
+                        this.boxRef.measure((...rest) => {
+                            console.log(rest[5]);
+                            this.point.setOffset({ x: 0, y: -rest[5] })
+                        })
+                    }
+                }}
+                ref={ref => (this.boxRef = ref)}
             >
                 <Text style={{ fontSize: 30 }}>Topics:</Text>
                 {
                     dragging &&
-                    <Animated.View style={{ top: point.getLayout().top, position: 'absolute', width: '100%', zIndex: 2 }}>
+                    <Animated.View style={{
+                        top: this.point.getLayout().top,
+                        ...styles.animatedView
+                    }}>
                         {renderItem({ item: draggingTopic, index: -1 }, false)}
                     </Animated.View>
                 }
@@ -144,6 +168,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'space-evenly',
+    },
+    animatedView: {
+        position: 'absolute',
+        width: '100%',
+        zIndex: 2,
+        opacity: 0.5
     }
 });
 /**

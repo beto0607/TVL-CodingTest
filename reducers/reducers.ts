@@ -52,7 +52,7 @@ const initialTopicsState: TopicState = {
     selectedTopic: null
 }
 
-export const topicReducer = (state: TopicState = initialTopicsState, action: TopicActions) => {
+export const topicReducer = (state: TopicState = initialTopicsState, action: TopicActions): TopicState => {
     const { type } = action;
     const { topics, selectedTopic } = state;
     switch (type) {
