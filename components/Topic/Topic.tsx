@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         marginVertical: 4,
-        borderColor: '#cdcdcd',
-        borderBottomWidth: 3,
+        borderColor: '#2a36b1',
+        borderBottomWidth: 1,
         width: '90%',
         flexDirection: 'row',
         justifyContent: 'space-between'
@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
     removeContainer: {
     },
     text: {
-        fontSize: 20
+        fontSize: 18,
+        color: '#263238'
     },
 });
 /**

@@ -42,17 +42,22 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
         };
     }
     toggleCollapsed = () => {
-        this.setState({ collapsed: !this.state.collapsed });
+        if (this.props.length === 0) {
+            this.setState({ collapsed: true })
+        } else {
+            this.setState({ collapsed: !this.state.collapsed });
+        }
     }
     componentDidUpdate(prevProps: Props, prevState: State) {
         const { layoutPosition } = this.state;
         const { y, topicDropped, topicToCategory, topic, title, topics, id, length } = this.props;
         // If was dragging, now it isn't and it ocurred above this category
         if (prevProps.dragging && !this.props.dragging && checkIfYInBox(y, layoutPosition)) {
-            console.log("dropped");
-            console.log({ title, topics, id, length }, topic)
             topicToCategory({ title, topics, id, length }, topic);
             topicDropped(topic);
+        }
+        if(prevProps.length > 0 && this.props.length === 0){
+            this.setState({collapsed: true});
         }
     }
     updateLayoutPosition = (e: LayoutChangeEvent) => {
@@ -73,7 +78,6 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
                 ref={ref => (this.boxRef = ref)}
             >
                 <TouchableOpacity
-                    style={styles.touchableContainer}
                     onPress={() => {
                         if (selectedTopic) {
                             topicToCategory({ title, topics, id, length }, selectedTopic);
@@ -85,8 +89,8 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
                     }}
                 >
                     <View style={styles.titleContainer}>
-                        <Text style={styles.title}>{title}</Text>
-                        <Text style={styles.quantity}>{length}</Text>
+                        <Text style={styles.text}>{title}</Text>
+                        <Text style={styles.text}>{length}</Text>
                     </View>
                     {
                         !collapsed && topics.map(topic => <TopicComponent {...topic} key={topic.id} canBeRemoved={true} />)
@@ -114,8 +118,8 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#e0f7fa',
         width: '100%',
-        padding: 7,
-        marginVertical: 5,
+        padding: 0,
+        marginVertical: 3,
         borderColor: '#999',
         borderTopWidth: 1,
         borderBottomWidth: 1,
@@ -124,20 +128,15 @@ const styles = StyleSheet.create({
     containerHovered: {
         backgroundColor: '#8bebf7'
     },
-    touchableContainer: {},
     titleContainer: {
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingBottom: 15
+        paddingHorizontal: 10
     },
-    title: {
+    text: {
         color: '#2a36b1',
-        fontSize: 20,
-    },
-    quantity: {
-        color: '#2a36b1',
-        fontSize: 20,
+        fontSize: 15,
     },
 });
 /**

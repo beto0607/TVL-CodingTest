@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Text, Header as HeaderElement } from 'react-native-elements';
 
 /**
  * COMPONENT PROPS
@@ -12,25 +12,21 @@ export interface Props {
  * REACT COMPONENT
  */
 export const Header: React.FC<Props> = ({ title }: Props) => (
-    <View style={styles.container}>
-        <Text style={styles.text} h4>{title}</Text>
-    </View>
+    <HeaderElement
+        placement="left"
+        containerStyle={styles.container}
+        centerComponent={{ text: title, style: styles.text }}
+    />
 )
 /**
  *  STYLES
  */
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#056f00',
-        alignItems: "flex-start",
-        justifyContent: 'flex-start',
-        width: '100%',
-        height: 80,
-        paddingTop: 40,
-        paddingLeft: 15,
+        backgroundColor: '#80cbc4'
     },
     text: {
-        color: '#fff',
-        fontWeight: 'bold'
+        color: '#263238',
+        fontSize: 20
     }
 });

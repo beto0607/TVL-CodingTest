@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, PanResponder, PanResponderInstance, FlatList, Animated, PanResponderGestureState, Image } from 'react-native';
+import { StyleSheet, View, PanResponder, PanResponderInstance, FlatList, Animated, PanResponderGestureState, Image } from 'react-native';
 import { TopicState, ApplicationState, Topic } from '../../types/types';
 import { connect } from 'react-redux';
 import { TopicComponent } from './Topic';
@@ -7,6 +7,7 @@ import { createDragAction, createDropAction } from '../../actions/actions';
 /// <reference path="types/module.d.ts"/>
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { Text } from 'react-native-elements';
 
 /**
  * COMPONENT PROPS
@@ -123,7 +124,7 @@ export class TopicContainerConnected extends React.Component<Props, State>{
                     marginLeft: 10
                 }}>
                 <View {...(panResponder ? this._panResponder.panHandlers : {})}>
-                    <FontAwesomeIcon icon={faGripVertical} size={20} />
+                    <FontAwesomeIcon icon={faGripVertical} size={15} color={'#80cbc4'} />
                 </View>
                 <TopicComponent {...item} />
             </View>
@@ -140,7 +141,7 @@ export class TopicContainerConnected extends React.Component<Props, State>{
                 }}
                 ref={ref => (this.boxRef = ref)}
             >
-                <Text style={{ fontSize: 30 }}>Topics:</Text>
+                <Text  style={{ width: '100%', textAlign: 'center', fontSize: 18 }}>Topics</Text>
                 {
                     dragging &&
                     <Animated.View style={{
@@ -171,6 +172,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'space-evenly',
+        borderTopColor: '#ccc', 
+        borderTopWidth: 1, 
+        marginTop: 5
     },
     animatedView: {
         position: 'absolute',

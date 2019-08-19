@@ -56,14 +56,13 @@ export const AddTopicComponentConnected: React.FC<Props> = ({ topicAdded }: Prop
 const styles = StyleSheet.create({
     container: {
         padding: 5,
-        backgroundColor: '#056f00',
+        backgroundColor: '#80cbc4',
         width: '100%',
         height: 60
     },
     button: {
-        color: '#fff',
-        fontWeight: 'bold',
-        fontSize: 19
+        color: '#263238',
+        fontSize: 18
     }
 });
 /**

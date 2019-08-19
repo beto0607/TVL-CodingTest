@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Topic, ApplicationState } from '../../types/types';
 import { connect } from 'react-redux';
 import { createTopicAddedAction } from '../../actions/actions';
@@ -32,12 +32,9 @@ export const SelectedTopicConnected: React.FC<Props> = ({ selectedTopic }: Props
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 10,
-        backgroundColor: '#056f00',
+        backgroundColor: '#80cbc4',
         width: '100%',
         alignItems: 'center'
-    },
-    button: {
-        color: '#fff'
     }
 });
 /**

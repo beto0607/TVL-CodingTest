@@ -12,7 +12,7 @@ export interface Props {
  */
 export const UsateText: React.FC<Props> = ({ text }: Props) => (
     <View style={styles.container}>
-        <Text style={styles.text}>{text || 'Drop or select one topic and tap in the categorya to populate it. '}</Text>
+        <Text style={styles.text}>{text || 'Drop or select one topic and tap in the category to populate it. '}</Text>
     </View>
 )
 /**
@@ -24,10 +24,11 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         justifyContent: 'flex-start',
         width: '100%',
-        padding: 15
+        paddingVertical: 5,
+        paddingHorizontal: 10
     },
     text: {
-        fontSize: 20,
-        color: '#000000'
+        fontSize: 15,
+        color: '#263238'
     }
 });
