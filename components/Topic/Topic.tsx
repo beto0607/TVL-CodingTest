@@ -17,16 +17,14 @@ export type Props = StateProps & DispatchProps & OwnProps
  */
 export const TopicComponentConnected: React.FC<Props> = ({ text, selected, id, topicSelected }: Props) => {
     return (
-        <View>
-            <TouchableOpacity
-                style={styles.container}
-                onPress={() => {
-                    topicSelected({ text, selected: !selected, id })
-                }}
-            >
-                <Text style={styles.text}>{text}</Text>
-            </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+            style={styles.container}
+            onPress={() => {
+                topicSelected({ text, selected: !selected, id })
+            }}
+        >
+            <Text style={styles.text}>{text}</Text>
+        </TouchableOpacity>
     )
 };
 /**
