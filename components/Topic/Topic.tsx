@@ -36,9 +36,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         marginVertical: 4,
         borderColor: '#cdcdcd',
-        borderRadius: 30,
-        borderWidth: 3,
-        backgroundColor: '#eee'
+        // borderRadius: 30,
+        borderBottomWidth: 3,
+        // backgroundColor: '#eee',
+         width: '90%'
     },
     text: {
         fontSize: 20

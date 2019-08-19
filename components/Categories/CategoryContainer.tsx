@@ -102,49 +102,6 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
         )
     }
 }
-export const CategoryContainerConnected2: React.FC<Props> = ({ title, id, topics, length, topicToCategory, selectedTopic, topicDropped, topic, y, dragging }: Props) => {
-    const [collapsed, setCollapsed] = useState(true);
-    const [layoutPosition, setLayout] = useState({});
-    if (dragging) {
-        console.log(layoutPosition);
-    }
-    return (
-        <View
-            style={{ ...styles.container, ...(dragging ? styles.containerHovered : {}) }}
-            onLayout={e => {
-                setLayout(e.nativeEvent.layout)
-            }}
-        >
-            <TouchableOpacity
-                style={styles.touchableContainer}
-                onPress={() => {
-                    if (selectedTopic) {
-                        topicToCategory({ title, topics, id, length }, selectedTopic);
-                        topicDropped(selectedTopic);
-                    } else {
-                        setCollapsed(!collapsed);
-                    }
-                }}
-            >
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>{title}</Text>
-                    <Text style={styles.quantity}>{length}</Text>
-                </View>
-                {
-                    !collapsed && topics.map(topic => <TopicComponent {...topic} key={topic.id} />)
-                }
-            </TouchableOpacity>
-            {
-                !collapsed &&
-                <Button
-                    title={collapsed ? "More" : 'Less'}
-                    onPress={() => setCollapsed(!collapsed)}
-                    color="#841584"
-                />
-            }
-        </View>
-    )
-}
 /**
  *  STYLES
  */

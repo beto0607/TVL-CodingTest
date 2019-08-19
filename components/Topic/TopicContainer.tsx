@@ -1,9 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, PanResponder, PanResponderInstance, FlatList, Animated, PanResponderGestureState } from 'react-native';
-import { TopicState, ApplicationState, TOPIC_SELECTED, Topic } from '../../types/types';
+import { StyleSheet, Text, View, PanResponder, PanResponderInstance, FlatList, Animated, PanResponderGestureState, Image } from 'react-native';
+import { TopicState, ApplicationState, Topic } from '../../types/types';
 import { connect } from 'react-redux';
 import { TopicComponent } from './Topic';
 import { createDragAction, createDropAction } from '../../actions/actions';
+/// <reference path="types/module.d.ts"/>
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * COMPONENT PROPS
@@ -112,16 +115,17 @@ export class TopicContainerConnected extends React.Component<Props, State>{
                     this.elementHeigth = e.nativeEvent.layout.height;
                 }}
                 style={{
-                    opacity: (draggingIndex === index ? 0 : 1)
-                }}>
-                <TopicComponent {...item} />
-                <View {...(panResponder ? this._panResponder.panHandlers : {})} style={{
-                    width: '100%',
+                    opacity: (draggingIndex === index ? 0 : 1),
+                    flexDirection: 'row',
+                    flex: 1,
+                    justifyContent: 'flex-start',
                     alignItems: 'center',
-                    marginBottom: 10
+                    marginLeft: 10
                 }}>
-                    <Text>@</Text>
+                <View {...(panResponder ? this._panResponder.panHandlers : {})}>
+                    <FontAwesomeIcon icon={faGripVertical} size={20} />
                 </View>
+                <TopicComponent {...item} />
             </View>
         )
         return (
@@ -130,7 +134,6 @@ export class TopicContainerConnected extends React.Component<Props, State>{
                     this.flatListTopOffset = e.nativeEvent.layout.y;
                     if (this.boxRef) {
                         this.boxRef.measure((...rest) => {
-                            console.log(rest[5]);
                             this.point.setOffset({ x: 0, y: -rest[5] })
                         })
                     }
