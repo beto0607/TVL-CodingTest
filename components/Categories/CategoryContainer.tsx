@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TouchableOpacity, LayoutChangeEvent } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, LayoutChangeEvent } from 'react-native';
 import { TopicComponent } from '../Topic/Topic';
 import { Category, ApplicationState, Topic, DragAndDropState } from '../../types/types';
 import { connect } from 'react-redux';
 import { createTopicToCategoryAction, createTopicDroppedAction } from '../../actions/actions';
 import { checkIfYInBox } from '../../utils/functions';
+import { Button } from 'react-native-elements';
+
 /**
  * COMPONENT PROPS
  */
@@ -87,15 +89,18 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
                         <Text style={styles.quantity}>{length}</Text>
                     </View>
                     {
-                        !collapsed && topics.map(topic => <TopicComponent {...topic} key={topic.id} />)
+                        !collapsed && topics.map(topic => <TopicComponent {...topic} key={topic.id} canBeRemoved={true} />)
                     }
                 </TouchableOpacity>
                 {
                     !collapsed &&
                     <Button
-                        title={collapsed ? "More" : 'Less'}
+                        title='Less'
                         onPress={this.toggleCollapsed}
-                        color="#841584"
+                        type="clear"
+                        titleStyle={{
+                            color: "#841584"
+                        }}
                     />
                 }
             </View>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Topic } from '../../types/types';
 import uuid from 'uuid';
 import Dialog from "react-native-dialog";
 import { connect } from 'react-redux';
 import { createTopicAddedAction } from '../../actions/actions';
+import { Button } from 'react-native-elements';
+
 
 /**
  * COMPONENT PROPS
@@ -35,9 +37,10 @@ export const AddTopicComponentConnected: React.FC<Props> = ({ topicAdded }: Prop
     return (
         <View style={styles.container}>
             <Button
-                color={styles.button.color}
+                titleStyle={styles.button}
                 title="Add topic"
                 onPress={() => togglePromt(true)}
+                type="clear"
             />
             <Dialog.Container visible={showingPropmt}>
                 <Dialog.Title>New topic</Dialog.Title>
@@ -59,7 +62,9 @@ const styles = StyleSheet.create({
         height: 60
     },
     button: {
-        color: '#fff'
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 19
     }
 });
 /**
