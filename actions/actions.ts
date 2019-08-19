@@ -12,10 +12,9 @@ export const createTopicAddedAction = (topic: Topic): TopicAddedAction => ({
 });
 // // TODO: Find a reason for having this action - DONE
 // Dispatchs an action when a topic is putted in a category(touch or drop)
-export const createTopicDroppedAction = (topic: Topic, category: Category): TopicDroppedAction => ({
+export const createTopicDroppedAction = (topic: Topic): TopicDroppedAction => ({
     type: TOPIC_DROPPED,
-    topic,
-    category
+    topic
 });
 // TODO: Find a reason for having this action
 export const createTopicDraggedAction = (topic: Topic): TopicDraggedAction => ({

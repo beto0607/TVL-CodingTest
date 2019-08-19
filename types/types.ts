@@ -6,13 +6,13 @@ export interface TopicDraggedAction {
     type: typeof TOPIC_DRAGGED;
     topic: Topic;
 }
-// TODO: Add topic to a category when dropped
-// TODO: Remove topic for any other category
+// // TODO: Add topic to a category when dropped - Done in TOPIC_TO_CATEGORY
+// // TODO: Remove topic from topic's pool - DONE
+// TODO: Remove topic from any other category
 export const TOPIC_DROPPED = "TOPIC_DROPPED";
 export interface TopicDroppedAction {
     type: typeof TOPIC_DROPPED;
     topic: Topic;
-    category: Category;
 }
 // // TODO: Add topic onSubmit
 export const TOPIC_ADDED = "TOPIC_ADDED";

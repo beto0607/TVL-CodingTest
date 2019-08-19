@@ -27,12 +27,14 @@ export const CategoryContainerConnected: React.FC<Props> = ({ title, id, topics,
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                style={styles.container}
+                style={styles.touchableContainer}
                 onPress={() => {
                     if (selectedTopic) {
                         topicToCategory({ title, topics, id, length }, selectedTopic);
                         // removeTopicSelected(selectedTopic);
                         topicDropped(selectedTopic);
+                    }else{
+                        setCollapsed(!collapsed);
                     }
                 }}
             >
@@ -41,14 +43,17 @@ export const CategoryContainerConnected: React.FC<Props> = ({ title, id, topics,
                     <Text style={styles.quantity}>{length}</Text>
                 </View>
                 {
-                    collapsed ? null : topics.map(topic => <TopicComponent {...topic} key={topic.id} />)
+                    !collapsed && topics.map(topic => <TopicComponent {...topic} key={topic.id} />)
                 }
             </TouchableOpacity>
-            <Button
-                title={collapsed ? "More" : 'Less'}
-                onPress={() => setCollapsed(!collapsed)}
-                color="#841584"
-            />
+            {
+                !collapsed &&
+                <Button
+                    title={collapsed ? "More" : 'Less'}
+                    onPress={() => setCollapsed(!collapsed)}
+                    color="#841584"
+                />
+            }
         </View>
     )
 }
@@ -59,10 +64,14 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#e0f7fa',
         width: '100%',
-        padding: 15,
-        marginBottom: 5,
-        marginTop: 5,
+        padding: 7,
+        marginVertical:5,
+        borderColor: '#999',
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        paddingVertical: 10
     },
+    touchableContainer:{},
     titleContainer: {
         flexDirection: 'row',
         width: '100%',

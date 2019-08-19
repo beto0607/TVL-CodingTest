@@ -12,7 +12,7 @@ export interface Props {
  */
 export const UsateText: React.FC<Props> = ({ text }: Props) => (
     <View style={styles.container}>
-        <Text style={styles.text}>{text || 'Drag a topic into a box to populate the field...'}</Text>
+        <Text style={styles.text}>{text || 'Drop or select one topic and tap in the categorya to populate it. '}</Text>
     </View>
 )
 /**
