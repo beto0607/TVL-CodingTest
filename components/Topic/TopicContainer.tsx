@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
  * REDUX 
  */
 const mapStateToProps = ({ topicReducer: { topics } }: ApplicationState): StateProps => ({
-    topics
+    topics: topics.reverse()
 });
 const mapDispatchToProps = (dispath: any) => ({
     drag: (y: number, topic: Topic) => dispath(createDragAction(y, topic)),

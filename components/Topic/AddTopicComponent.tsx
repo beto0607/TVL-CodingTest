@@ -30,7 +30,6 @@ export const AddTopicComponentConnected: React.FC<Props> = ({ topicAdded }: Prop
         togglePromt(false);
         topicAdded({
             text: topicName,
-            selected: false,
             id: uuid.v1()
         })
     }

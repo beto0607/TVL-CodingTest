@@ -1,4 +1,4 @@
-import { TOPIC_SELECTED, Topic, TOPIC_ADDED, Category, TOPIC_DROPPED, CATEGORY_ADDED, CategoryAddedAction, TopicDroppedAction, TopicAddedAction, TopicSelectedAction, TopicToCategoryAction, TOPIC_TO_CATEGORY, DropAction, DragAction, DRAG, DROP } from "../types/types";
+import { TOPIC_SELECTED, Topic, TOPIC_ADDED, Category, TOPIC_DROPPED, TopicDroppedAction, TopicAddedAction, TopicSelectedAction, TopicToCategoryAction, TOPIC_TO_CATEGORY, DropAction, DragAction, DRAG, DROP, TopicRemovedFromCategoryAction, TOPIC_REMOVED_FROM_CATEGORY } from "../types/types";
 
 // Dispatchs an action when you press a Topic
 export const createTopicSelectedAction = (topic: Topic): TopicSelectedAction => ({
@@ -28,14 +28,14 @@ export const createDropAction = (y: number, topic: Topic): DropAction => ({
     y,
     topic
 });
-// TODO: Dispatchs an action when you submit a new category
-export const createCategoryAddedAction = (category: Category): CategoryAddedAction => ({
-    type: CATEGORY_ADDED,
-    category
-});
 // Dispatchs an action when you press in a category having a Topic selected
 export const createTopicToCategoryAction = (category: Category, topic: Topic): TopicToCategoryAction => ({
     type: TOPIC_TO_CATEGORY,
     category,
+    topic
+});
+// Dispatchs an action when a topic is removed from a category
+export const createTopicRemovedFromCategoryAction = (topic: Topic): TopicRemovedFromCategoryAction => ({
+    type: TOPIC_REMOVED_FROM_CATEGORY,
     topic
 });

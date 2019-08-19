@@ -22,7 +22,7 @@ export const SelectedTopicConnected: React.FC<Props> = ({ selectedTopic }: Props
         return null;
     return (
         <View style={styles.container}>
-            <TopicComponent {...selectedTopic} />
+            <TopicComponent {...selectedTopic} canBeRemoved={false} />
         </View>
     )
 }

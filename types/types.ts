@@ -22,21 +22,15 @@ export interface TopicSelectedAction {
     type: typeof TOPIC_SELECTED;
     topic: Topic;
 }
-export type TopicActions = TopicSelectedAction | TopicDraggedAction | TopicDroppedAction | TopicAddedAction;
+export type TopicActions = TopicSelectedAction | TopicDroppedAction | TopicAddedAction;
 
-export const DRAG_TERMINATED = "DRAG_TERMINATED";
-export type DRAG_TERMINATED = typeof DRAG_TERMINATED;
-export interface DragTerminatedAction {
-    type: DRAG_TERMINATED;
-    y: number;
-    topic: Topic;
-}
-export const CATEGORY_ADDED = "CATEGORY_ADDED";
-export type CATEGORY_ADDED = typeof CATEGORY_ADDED;
-export interface CategoryAddedAction {
-    type: CATEGORY_ADDED;
-    category: Category;
-}
+// export const DRAG_TERMINATED = "DRAG_TERMINATED";
+// export type DRAG_TERMINATED = typeof DRAG_TERMINATED;
+// export interface DragTerminatedAction {
+//     type: DRAG_TERMINATED;
+//     y: number;
+//     topic: Topic;
+// }
 export const TOPIC_TO_CATEGORY = "TOPIC_TO_CATEGORY";
 export type TOPIC_TO_CATEGORY = typeof TOPIC_TO_CATEGORY;
 export interface TopicToCategoryAction {
@@ -44,7 +38,13 @@ export interface TopicToCategoryAction {
     category: Category;
     topic: Topic;
 }
-export type CategoryActions = CategoryAddedAction | TopicToCategoryAction;
+export const TOPIC_REMOVED_FROM_CATEGORY = "TOPIC_REMOVED_FROM_CATEGORY";
+export type TOPIC_REMOVED_FROM_CATEGORY = typeof TOPIC_REMOVED_FROM_CATEGORY;
+export interface TopicRemovedFromCategoryAction {
+    type: TOPIC_REMOVED_FROM_CATEGORY;
+    topic: Topic;
+}
+export type CategoryActions = TopicToCategoryAction | TopicRemovedFromCategoryAction;
 
 export const DRAG = "DRAG";
 export type DRAG = typeof DRAG;
@@ -68,7 +68,6 @@ export type AppActions = CategoryActions | TopicActions | DragAndDropActions;
 export interface Topic {
     id: string;
     text: string;
-    selected: boolean;
 }
 
 export interface TopicState {
