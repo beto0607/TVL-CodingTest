@@ -1,29 +1,49 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { TopicComponent } from '../Topic/Topic';
-import { Category } from '../../types/types';
+import { Category, ApplicationState, Topic } from '../../types/types';
+import { connect } from 'react-redux';
+import { createTopicToCategoryAction, createTopicSelectedAction, createTopicDroppedAction } from '../../actions/actions';
 
 /**
  * COMPONENT PROPS
  */
 interface OwnProps extends Category { }
-interface StateProps { }
-interface DispatchProps { }
+interface StateProps {
+    selectedTopic?: Topic;
+}
+interface DispatchProps {
+    topicToCategory: (category: Category, topic: Topic) => void;
+    removeTopicSelected: (topic: Topic) => void;
+    topicDropped: (topic: Topic) => void;
+}
 export type Props = StateProps & DispatchProps & OwnProps
 /**
  * REACT COMPONENT
  */
-export const CategoryContainer: React.FC<Props> = ({ title, topics }: Props) => {
+export const CategoryContainerConnected: React.FC<Props> = ({ title, id, topics, length, topicToCategory, selectedTopic, removeTopicSelected, topicDropped }: Props) => {
     const [collapsed, setCollapsed] = useState(true);
+    console.log(topics.length);
     return (
         <View style={styles.container}>
-            <View style={styles.titleContainer}>
-                <Text style={styles.title}>{title}</Text>
-                <Text style={styles.quantity}>0</Text>
-            </View>
-            {
-                collapsed ? null : topics.map(topic => <TopicComponent {...topic} key={topic.id} />)
-            }
+            <TouchableOpacity
+                style={styles.container}
+                onPress={() => {
+                    if (selectedTopic) {
+                        topicToCategory({ title, topics, id, length }, selectedTopic);
+                        // removeTopicSelected(selectedTopic);
+                        topicDropped(selectedTopic);
+                    }
+                }}
+            >
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.quantity}>{length}</Text>
+                </View>
+                {
+                    collapsed ? null : topics.map(topic => <TopicComponent {...topic} key={topic.id} />)
+                }
+            </TouchableOpacity>
             <Button
                 title={collapsed ? "More" : 'Less'}
                 onPress={() => setCollapsed(!collapsed)}
@@ -61,3 +81,13 @@ const styles = StyleSheet.create({
 /**
  * REDUX
  */
+const mapStateToProps = ({ topicReducer: { selectedTopic } }: ApplicationState, ownProps: OwnProps): StateProps => ({
+    ...ownProps,
+    selectedTopic
+});
+const mapDispatchToProps = (dispatch: any): DispatchProps => ({
+    topicToCategory: (category: Category, topic: Topic) => { dispatch(createTopicToCategoryAction(category, topic)) },
+    removeTopicSelected: (topic: Topic) => { dispatch(createTopicSelectedAction(topic)) },
+    topicDropped: (topic: Topic) => { dispatch(createTopicDroppedAction(topic)) }
+});
+export const CategoryContainer = connect(mapStateToProps, mapDispatchToProps)(CategoryContainerConnected);

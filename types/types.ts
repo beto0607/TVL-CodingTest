@@ -6,17 +6,21 @@ export interface TopicDraggedAction {
     type: typeof TOPIC_DRAGGED;
     topic: Topic;
 }
+// TODO: Add topic to a category when dropped
+// TODO: Remove topic for any other category
 export const TOPIC_DROPPED = "TOPIC_DROPPED";
 export interface TopicDroppedAction {
     type: typeof TOPIC_DROPPED;
     topic: Topic;
     category: Category;
 }
+// // TODO: Add topic onSubmit
 export const TOPIC_ADDED = "TOPIC_ADDED";
 export interface TopicAddedAction {
     type: typeof TOPIC_ADDED;
     topic: Topic;
 }
+// // TODO: Add Topic onPress
 export const TOPIC_SELECTED = "TOPIC_SELECTED";
 export interface TopicSelectedAction {
     type: typeof TOPIC_SELECTED;
@@ -25,11 +29,19 @@ export interface TopicSelectedAction {
 export type TopicActions = TopicSelectedAction | TopicDraggedAction | TopicDroppedAction | TopicAddedAction;
 
 export const CATEGORY_ADDED = "CATEGORY_ADDED";
+export type CATEGORY_ADDED = typeof CATEGORY_ADDED;
 export interface CategoryAddedAction {
-    type: typeof CATEGORY_ADDED;
+    type: CATEGORY_ADDED;
     category: Category;
 }
-export type CategoryActions = CategoryAddedAction;
+export const TOPIC_TO_CATEGORY = "TOPIC_TO_CATEGORY";
+export type TOPIC_TO_CATEGORY = typeof TOPIC_TO_CATEGORY;
+export interface TopicToCategoryAction {
+    type: TOPIC_TO_CATEGORY;
+    category: Category;
+    topic: Topic;
+}
+export type CategoryActions = CategoryAddedAction | TopicToCategoryAction;
 
 
 export type AppActions = CategoryActions | TopicActions;
@@ -52,9 +64,12 @@ export interface Category {
     id: string;
     title: string;
     topics: Array<Topic>;
+    length: number;
 }
 export interface CategoriesState {
     categories: Array<Category>;
+    // Used as workaround for updating all the categories
+    tokenUpdate: string;
 }
 
 
