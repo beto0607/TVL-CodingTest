@@ -1,18 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
 
 /**
  * COMPONENT PROPS
  */
 export interface Props {
-    title?: string;
+    title: string;
 };
 /**
  * REACT COMPONENT
  */
 export const Header: React.FC<Props> = ({ title }: Props) => (
     <View style={styles.container}>
-        <Text style={styles.text}>{title || 'Header'}</Text>
+        <Text style={styles.text} h4>{title}</Text>
     </View>
 )
 /**
@@ -24,12 +25,12 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
         justifyContent: 'flex-start',
         width: '100%',
-        height: 90,
+        height: 80,
         paddingTop: 40,
         paddingLeft: 15,
     },
     text: {
-        fontSize: 25,
-        color: '#fff'
+        color: '#fff',
+        fontWeight: 'bold'
     }
 });
