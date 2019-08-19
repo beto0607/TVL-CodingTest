@@ -17,14 +17,11 @@ export type Props = StateProps & DispatchProps & OwnProps
 /**
  * REACT COMPONENT
  */
-export const CategoriesWrapperConnected: React.FC<Props> = ({ categories }: Props) => {
-    console.log(categories);
-    return (
-        <View style={styles.container}>
-            {categories.map((category) => (<CategoryContainer {...category} key={category.id} />))}
-        </View>
-    )
-};
+export const CategoriesWrapperConnected: React.FC<Props> = ({ categories }: Props) => (
+    <View style={styles.container}>
+        {categories.map((category) => (<CategoryContainer {...category} key={category.id} />))}
+    </View>
+);
 /**
  *  STYLES
  */

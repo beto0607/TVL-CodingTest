@@ -23,7 +23,6 @@ export type Props = StateProps & DispatchProps & OwnProps
  */
 export const CategoryContainerConnected: React.FC<Props> = ({ title, id, topics, length, topicToCategory, selectedTopic, removeTopicSelected, topicDropped }: Props) => {
     const [collapsed, setCollapsed] = useState(true);
-    console.log(topics.length);
     return (
         <View style={styles.container}>
             <TouchableOpacity
