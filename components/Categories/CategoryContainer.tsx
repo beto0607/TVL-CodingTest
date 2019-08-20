@@ -7,6 +7,10 @@ import { createTopicToCategoryAction, createTopicDroppedAction } from '../../act
 import { checkIfYInBox } from '../../utils/functions';
 import { Button } from 'react-native-elements';
 
+/// <reference path="types/module.d.ts"/>
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
 /**
  * COMPONENT PROPS
  */
@@ -56,8 +60,8 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
             topicToCategory({ title, topics, id, length }, topic);
             topicDropped(topic);
         }
-        if(prevProps.length > 0 && this.props.length === 0){
-            this.setState({collapsed: true});
+        if (prevProps.length > 0 && this.props.length === 0) {
+            this.setState({ collapsed: true });
         }
     }
     updateLayoutPosition = (e: LayoutChangeEvent) => {
@@ -77,6 +81,11 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
                 onLayout={this.updateLayoutPosition}
                 ref={ref => (this.boxRef = ref)}
             >
+                {dragging &&
+                    <View style={styles.dropZone}>
+                        <FontAwesomeIcon icon={faArrowRight} size={16} color={'#80cbc4'} />
+                    </View>
+                }
                 <TouchableOpacity
                     onPress={() => {
                         if (selectedTopic) {
@@ -123,10 +132,17 @@ const styles = StyleSheet.create({
         borderColor: '#999',
         borderTopWidth: 1,
         borderBottomWidth: 1,
-        paddingVertical: 10
+        paddingVertical: 10,
+        flexDirection: 'row'
     },
     containerHovered: {
         backgroundColor: '#8bebf7'
+    },
+    dropZone: {
+        marginLeft: 10,
+        paddingHorizontal: 5,
+        borderColor: '#80cbc4',
+        borderWidth: 1
     },
     titleContainer: {
         flexDirection: 'row',
