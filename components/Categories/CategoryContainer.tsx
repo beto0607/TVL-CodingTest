@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, LayoutChangeEvent } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity, LayoutChangeEvent } from 'react-native';
 import { TopicComponent } from '../Topic/Topic';
 import { Category, ApplicationState, Topic, DragAndDropState } from '../../types/types';
 import { connect } from 'react-redux';
 import { createTopicToCategoryAction, createTopicDroppedAction } from '../../actions/actions';
-import { checkIfYInBox } from '../../utils/functions';
-import { Button } from 'react-native-elements';
+import { checkIfPointInBox } from '../../utils/functions';
+import { Button, Text } from 'react-native-elements';
 
 /// <reference path="types/module.d.ts"/>
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -54,9 +54,9 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
     }
     componentDidUpdate(prevProps: Props, prevState: State) {
         const { layoutPosition } = this.state;
-        const { y, topicDropped, topicToCategory, topic, title, topics, id, length } = this.props;
+        const { y, x, topicDropped, topicToCategory, topic, title, topics, id, length } = this.props;
         // If was dragging, now it isn't and it ocurred above this category
-        if (prevProps.dragging && !this.props.dragging && checkIfYInBox(y, layoutPosition)) {
+        if (prevProps.dragging && !this.props.dragging && checkIfPointInBox({ x, y }, layoutPosition)) {
             topicToCategory({ title, topics, id, length }, topic);
             topicDropped(topic);
         }
@@ -67,26 +67,36 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
     updateLayoutPosition = (e: LayoutChangeEvent) => {
         if (this.boxRef) {
             this.boxRef.measure((...rest) => {
-                this.setState({ layoutPosition: { y: rest[5], heigth: rest[3] } })
+                /**
+                 * x => rest[0] relative to parent
+                 * y => rest[1] relative to parent
+                 * width => rest[2]
+                 * height => rest[3]
+                 * pageX => rest[4]
+                 * pageY => rest[5]
+                 * */
+                this.setState({ layoutPosition: { x: rest[4], width: rest[2], y: rest[5], heigth: rest[3] } })
             })
         }
     }
+    // onLayout={this.updateLayoutPosition}
+    // ref={ref => (this.boxRef = ref)}
     render() {
         const { collapsed, layoutPosition } = this.state;
-        const { dragging, title, topics, id, length, selectedTopic, topicToCategory, topicDropped, y } = this.props;
-        const hovered = dragging && checkIfYInBox(y, layoutPosition) || false;
+        const { dragging, title, topics, id, length, selectedTopic, topicToCategory, topicDropped, x, y } = this.props;
+        const hovered = dragging && checkIfPointInBox({ x, y }, layoutPosition) || false;
         return (
             <View
                 style={{ ...styles.container, ...(hovered ? styles.containerHovered : {}) }}
-                onLayout={this.updateLayoutPosition}
-                ref={ref => (this.boxRef = ref)}
             >
                 {dragging &&
-                    <View style={styles.dropZone}>
+                    <View style={styles.dropZone} onLayout={this.updateLayoutPosition}
+                        ref={ref => (this.boxRef = ref)}>
                         <FontAwesomeIcon icon={faArrowRight} size={16} color={'#80cbc4'} />
                     </View>
                 }
                 <TouchableOpacity
+                    style={{ width: '100%' }}
                     onPress={() => {
                         if (selectedTopic) {
                             topicToCategory({ title, topics, id, length }, selectedTopic);
@@ -99,7 +109,7 @@ export class CategoryContainerConnected extends React.Component<Props, State>{
                 >
                     <View style={styles.titleContainer}>
                         <Text style={styles.text}>{title}</Text>
-                        <Text style={styles.text}>{length}</Text>
+                        <Text style={styles.size}>{length}</Text>
                     </View>
                     {
                         !collapsed && topics.map(topic => <TopicComponent {...topic} key={topic.id} canBeRemoved={true} />)
@@ -133,7 +143,8 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderBottomWidth: 1,
         paddingVertical: 10,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        paddingHorizontal: 10
     },
     containerHovered: {
         backgroundColor: '#8bebf7'
@@ -147,13 +158,18 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10
+        justifyContent: 'space-between'
     },
     text: {
         color: '#2a36b1',
         fontSize: 15,
+        marginLeft: 10
     },
+    size: {
+        color: '#2a36b1',
+        fontSize: 15,
+        alignSelf: 'flex-end',
+    }
 });
 /**
  * REDUX

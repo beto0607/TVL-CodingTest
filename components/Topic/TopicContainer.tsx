@@ -15,8 +15,8 @@ import { Text } from 'react-native-elements';
 interface OwnProps { }
 interface StateProps extends TopicState { }
 interface DispatchProps {
-    drag: (y: number, topic: Topic) => void;
-    drop: (y: number, topic: Topic) => void;
+    drag: (x: number, y: number, topic: Topic) => void;
+    drop: (x: number, y: number, topic: Topic) => void;
 }
 export type Props = StateProps & DispatchProps & OwnProps;
 /**
@@ -62,18 +62,20 @@ export class TopicContainerConnected extends React.Component<Props, State>{
             // Drag start
             onPanResponderGrant: (evt, gestureState) => {
                 // Animated.event([null, { dx: this.point.x, dy: this.point.y }])(evt, gestureState);
-                Animated.event([{ y: this.point.y }])({
-                    y: gestureState.y0 - this.elementHeigth / 2
+                Animated.event([{ y: this.point.y, x: this.point.x }])({
+                    y: gestureState.y0 - this.elementHeigth / 2,
+                    x: gestureState.x0
                 });
-
-                this.dragStarted(gestureState.y0)
+                this.dragStarted(gestureState.x0, gestureState.y0);
             },
             // Drag update
             onPanResponderMove: (evt, gestureState) => {
                 // Animated.event([null, { dx: this.point.x, dy: this.point.y }])(evt, gestureState);
-                Animated.event([{ y: this.point.y }])({ y: gestureState.moveY - this.elementHeigth / 2 });
-
-                this.dragUpdate(gestureState.moveY);
+                Animated.event([{ y: this.point.y, x: this.point.x }])({
+                    y: gestureState.moveY - this.elementHeigth / 2,
+                    x: gestureState.moveX
+                });
+                this.dragUpdate(gestureState.moveX, gestureState.moveY);
             },
             // Drop
             onPanResponderRelease: (evt, gestureState) => {
@@ -85,25 +87,25 @@ export class TopicContainerConnected extends React.Component<Props, State>{
             },
         });
     }
-    dragStarted = (y: number) => {
+    dragStarted = (x: number, y: number) => {
         this.currentIdx = this.yToIndex(y);
         const currentTopic = this.props.topics[this.currentIdx];
         // Dispatch Redux action
-        this.props.drag(y, currentTopic)
+        this.props.drag(x, y, currentTopic)
         this.setState({
             dragging: true,
             draggingIndex: this.currentIdx,
             draggingTopic: currentTopic
         });
     }
-    dragUpdate = (y: number) => {
+    dragUpdate = (x: number, y: number) => {
         const currentTopic = this.state.draggingTopic || this.props.topics[this.currentIdx];
         // Dispatch Redux action
-        this.props.drag(y, currentTopic)
+        this.props.drag(x, y, currentTopic)
     }
     reset = (gestureState: PanResponderGestureState) => {
         // Dispatch Redux action
-        this.props.drop(gestureState.moveY, this.state.draggingTopic);
+        this.props.drop(gestureState.moveX, gestureState.moveY, this.state.draggingTopic);
         this.setState({ dragging: false, draggingIndex: -1, draggingTopic: null });
     }
     render() {
@@ -141,7 +143,7 @@ export class TopicContainerConnected extends React.Component<Props, State>{
                 }}
                 ref={ref => (this.boxRef = ref)}
             >
-                <Text  style={{ width: '100%', textAlign: 'center', fontSize: 18 }}>Topics</Text>
+                <Text style={{ width: '100%', textAlign: 'center', fontSize: 18 }}>Topics</Text>
                 {
                     dragging &&
                     <Animated.View style={{
@@ -172,8 +174,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'space-evenly',
-        borderTopColor: '#ccc', 
-        borderTopWidth: 1, 
+        borderTopColor: '#ccc',
+        borderTopWidth: 1,
         marginTop: 5
     },
     animatedView: {
@@ -190,7 +192,7 @@ const mapStateToProps = ({ topicReducer: { topics } }: ApplicationState): StateP
     topics: topics.reverse()
 });
 const mapDispatchToProps = (dispath: any) => ({
-    drag: (y: number, topic: Topic) => dispath(createDragAction(y, topic)),
-    drop: (y: number, topic: Topic) => dispath(createDropAction(y, topic))
+    drag: (x: number, y: number, topic: Topic) => dispath(createDragAction(x, y, topic)),
+    drop: (x: number, y: number, topic: Topic) => dispath(createDropAction(x, y, topic))
 })
 export const TopicContainer = connect(mapStateToProps, mapDispatchToProps)(TopicContainerConnected);

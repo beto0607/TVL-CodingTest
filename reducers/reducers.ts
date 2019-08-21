@@ -135,6 +135,7 @@ export const categoryReducer = (state: CategoriesState = initialCategoriesState,
 }
 const initialDragAndDropState: DragAndDropState = {
     y: 0,
+    x: 0,
     topic: null,
     dragging: false
 }
@@ -143,11 +144,12 @@ export const dragAndDropReducer = (state: DragAndDropState = initialDragAndDropS
     switch (type) {
         case DROP:
         case DRAG:
-            const { y, topic } = action;
+            const { x, y, topic } = action;
             return {
                 ...state,
                 dragging: type === DRAG,
                 y,
+                x,
                 topic
             };
         default:

@@ -50,6 +50,7 @@ export const DRAG = "DRAG";
 export type DRAG = typeof DRAG;
 export interface DragAction {
     type: typeof DRAG;
+    x: number;
     y: number;
     topic: Topic;
 }
@@ -57,6 +58,7 @@ export const DROP = "DROP";
 export type DROP = typeof DROP;
 export interface DropAction {
     type: typeof DROP;
+    x: number;
     y: number;
     topic: Topic;
 }
@@ -91,6 +93,7 @@ export interface CategoriesState {
 // DRAG_AND_DROP
 export interface DragAndDropState {
     y: number;
+    x: number;
     topic: Topic;
     dragging: boolean;
 }

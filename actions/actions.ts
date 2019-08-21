@@ -17,14 +17,16 @@ export const createTopicDroppedAction = (topic: Topic): TopicDroppedAction => ({
     topic
 });
 // Dispatchs an action when a Drag starts and updates
-export const createDragAction = (y: number, topic: Topic): DragAction => ({
+export const createDragAction = (x: number, y: number, topic: Topic): DragAction => ({
     type: DRAG,
+    x,
     y,
     topic
 });
 // Dispatchs an action when a Drag finishs
-export const createDropAction = (y: number, topic: Topic): DropAction => ({
+export const createDropAction = (x: number, y: number, topic: Topic): DropAction => ({
     type: DROP,
+    x,
     y,
     topic
 });
