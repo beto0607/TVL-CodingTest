@@ -2,6 +2,7 @@
 
 ## My solution
 
+-   [create-react-native-app](https://www.npmjs.com/package/create-react-native-app): Boiler plate.
 -   [Typescript](https://www.typescriptlang.org/) as language.
 -   [Redux](http://Redux.js.org/) for state magnament: The list of topics, categories, where is each topic, if the user is dragging a topic, etc.
 -   [React Native Elements](https://react-native-training.github.io/react-native-elements/) for some built-in components(Header, Texts).
